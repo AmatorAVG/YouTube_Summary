@@ -1,0 +1,20 @@
+# Memory bank (AI assistant internal documentation)
+memory-bank/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Backup files
+*_backup.html
+*.bak
+
+index1.html
+index2.html
