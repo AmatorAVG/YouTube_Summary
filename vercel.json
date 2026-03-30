@@ -1,3 +1,8 @@
 {
-  "rootDirectory": "front"
+  "builds": [
+    {
+      "src": "front/package.json",
+      "use": "@vercel/next"
+    }
+  ]
 }
