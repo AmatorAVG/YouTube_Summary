@@ -1,5 +1,6 @@
 import { generateText } from "ai"
 import { createOpenRouter } from "@openrouter/ai-sdk-provider"
+import { createClient } from "@/lib/supabase/server"
 
 const SUPADATA_API_KEY = process.env.SUPADATA_API_KEY
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY
@@ -123,6 +124,29 @@ async function generateSummary(transcript: string): Promise<string> {
 
 export async function POST(request: Request) {
   try {
+    // Check authentication
+    const supabase = await createClient()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return Response.json(
+        { error: "Необходима авторизация" },
+        { status: 401 }
+      )
+    }
+
+    // Check generation limit
+    const { data: remaining } = await (supabase as any).rpc("get_remaining_generations", {
+      p_user_id: user.id,
+    })
+
+    if ((remaining ?? 0) <= 0) {
+      return Response.json(
+        { error: "Вы исчерпали лимит генераций (5). Обратитесь к администратору." },
+        { status: 403 }
+      )
+    }
+
     const { url } = await request.json()
 
     if (!url || typeof url !== "string") {
@@ -157,6 +181,12 @@ export async function POST(request: Request) {
     // Generate summary
     const summary = await generateSummary(transcript)
     console.log("[v0] Generated summary, length:", summary.length)
+
+    // Record the generation
+    await (supabase as any).from("user_generations").insert({
+      user_id: user.id,
+      video_url: url,
+    })
 
     return Response.json({
       title,

@@ -8,9 +8,10 @@ import { Spinner } from "@/components/ui/spinner"
 interface UrlInputProps {
   onSubmit: (url: string) => void
   isLoading: boolean
+  disabled?: boolean
 }
 
-export function UrlInput({ onSubmit, isLoading }: UrlInputProps) {
+export function UrlInput({ onSubmit, isLoading, disabled = false }: UrlInputProps) {
   const [url, setUrl] = useState("")
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -29,12 +30,12 @@ export function UrlInput({ onSubmit, isLoading }: UrlInputProps) {
           onChange={(e) => setUrl(e.target.value)}
           placeholder="https://www.youtube.com/watch?v=..."
           className="flex-1 h-12 text-base bg-card border-input"
-          disabled={isLoading}
+          disabled={isLoading || disabled}
           required
         />
         <Button 
           type="submit" 
-          disabled={isLoading || !url.trim()}
+          disabled={isLoading || disabled || !url.trim()}
           className="h-12 px-8 text-base font-medium"
         >
           {isLoading ? (
