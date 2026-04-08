@@ -6,7 +6,8 @@
     "dev": "NODE_OPTIONS='--max-old-space-size=2048' next dev",
     "build": "NODE_OPTIONS='--max-old-space-size=4096' next build",
     "start": "NODE_OPTIONS='--max-old-space-size=2048' next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:e2e": "npx playwright test --config=playwright.config.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
