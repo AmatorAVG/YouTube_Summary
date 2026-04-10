@@ -23,3 +23,7 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+entities.json
+mempalace.yaml
+.clinerules/
